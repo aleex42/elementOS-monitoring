@@ -14,7 +14,7 @@ Scripts for monitoring NetApp ElementOS (Solidfire) clusters for Nagios / Icinga
 
 # Examples
 
-![Nagios](https://github.com/aleex42/elementOS-monitoring/tree/master/examples/nagios.png)
+![Nagios](https://github.com/aleex42/elementOS-monitoring/blob/master/examples/nagios.png)
 
 # Contact / Author
 
