@@ -1,0 +1,113 @@
+#!/usr/bin/perl
+
+# nagios: -epn
+# --
+# check_element_cluster_space - Check NetApp ElementOS Space usage
+# Copyright (C) 2019 Alexander Krogloth, git@krogloth.de
+# --
+# This software comes with ABSOLUTELY NO WARRANTY. For details, see
+# the enclosed file COPYING for license information (GPL). If you
+# did not receive this file, see http://www.gnu.org/licenses/gpl.txt.
+# --
+
+use strict;
+use warnings;
+
+use Encode qw(encode_utf8);
+use HTTP::Request ();
+use JSON::MaybeXS qw(encode_json decode_json);
+use Data::Dumper;
+use LWP::UserAgent;
+use Getopt::Long;
+
+GetOptions(
+    'hostname=s' => \my $Hostname,
+    'username=s' => \my $Username,
+    'password=s' => \my $Password,
+    'help|?'     => sub { exec perldoc => -F => $0 or die "Cannot execute perldoc: $!\n"; },
+) or Error("$0: Error in command line arguments\n");
+
+sub Error {
+    print "$0: " . $_[0] . "\n";
+    exit 2;
+}
+Error('Option --hostname needed!') unless $Hostname;
+Error('Option --username needed!') unless $Username;
+Error('Option --password needed!') unless $Password;
+
+sub connect_api {
+
+    my $method = shift;
+
+    my $browser = LWP::UserAgent->new;
+    $browser->ssl_opts(SSL_verify_mode => 0);
+    $browser->ssl_opts(verify_hostname => 0);
+
+    my $json = {
+        method  => $method,
+     };
+
+    my $header = ['Content-Type' => 'application/json; charset=UTF-8'];
+    my $encoded_data = encode_utf8(encode_json($json));
+
+    my $req = HTTP::Request->new( POST => "https://$Hostname/json-rpc/11.3/", $header, $encoded_data );
+    $req->authorization_basic( $Username, $Password );
+
+    my $page = $browser->request( $req );
+
+    my $content = $page->decoded_content;
+
+    my $student = decode_json $content;
+
+    return $student;
+
+}
+
+my $output = connect_api("GetClusterCapacity");
+
+my $stats = $output->{'result'}->{'clusterCapacity'};
+
+my $total_space = $stats->{'maxUsedSpace'};
+my $used_space = $stats->{'usedSpace'};
+
+my $percent = $used_space/$total_space*100;
+$percent = sprintf("%.2f", $percent);
+
+if($percent > 70){
+    print "WARNING: cluster $percent % space usage\n";
+    exit 2;
+} else { 
+    print "OK: cluster space usage OK ($percent %)\n";
+    exit 0;
+}
+
+#$VAR1 = {
+#          'id' => undef,
+#          'result' => {
+#                        'clusterCapacity' => {
+#                                               'totalOps' => 5481974816,
+#                                               'currentIOPS' => 4,
+#                                               'averageIOPS' => 1800,
+#                                               'nonZeroBlocks' => 247473741,
+#                                               'maxIOPS' => 200000,
+#                                               'uniqueBlocksUsedSpace' => '48061617985',
+#                                               'timestamp' => '2019-11-16T13:59:56Z',
+#                                               'usedSpace' => '48101484873',
+#                                               'usedMetadataSpaceInSnapshots' => 4011978752,
+#                                               'usedMetadataSpace' => 4011978752,
+#                                               'clusterRecentIOSize' => 0,
+#                                               'uniqueBlocks' => 16150854,
+#                                               'maxProvisionedSpace' => '110615957233664',
+#                                               'peakIOPS' => 153836,
+#                                               'snapshotNonZeroBlocks' => 0,
+#                                               'zeroBlocks' => 2369417651,
+#                                               'peakActiveSessions' => 22,
+#                                               'activeSessions' => 22,
+#                                               'maxUsedSpace' => '9602079621120',
+#                                               'maxOverProvisionableSpace' => '553079786168320',
+#                                               'maxUsedMetadataSpace' => '864187165900',
+#                                               'provisionedSpace' => '5359393570816',
+#                                               'activeBlockSpace' => '58664759904'
+#                                             }
+#                      }
+        #};
