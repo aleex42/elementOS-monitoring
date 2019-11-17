@@ -71,9 +71,9 @@ my $cluster_util = $stats->{'clusterUtilization'}*100;
 $cluster_util = sprintf("%.2f", $cluster_util);
 
 if($cluster_util > 75){
-    print "WARNING: high cluster performance utilization: $cluster_util%\n";
+    print "WARNING: high cluster performance utilization ($cluster_util%)\n";
     exit 2;
 } else { 
-    print "OK: cluster performance utilization $cluster_util%\n";
+    print "OK: cluster performance utilization ($cluster_util%)\n";
     exit 0;
 }

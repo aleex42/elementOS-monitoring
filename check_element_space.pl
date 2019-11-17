@@ -74,10 +74,10 @@ my $percent = $used_space/$total_space*100;
 $percent = sprintf("%.2f", $percent);
 
 if($percent > 70){
-    print "WARNING: cluster $percent % space usage\n";
+    print "WARNING: cluster space usage ($percent %)\n";
     exit 2;
 } else { 
-    print "OK: cluster space usage OK ($percent %)\n";
+    print "OK: cluster space usage ($percent %)\n";
     exit 0;
 }
 
