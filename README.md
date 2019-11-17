@@ -9,6 +9,7 @@ Scripts for monitoring NetApp ElementOS (Solidfire) clusters for Nagios / Icinga
 * check_element_cluster_performance.pl: Cluster Performance Headroom
 * check_element_drives.pl: Drive Status
 * check_element_interfaces.pl: Interface Status
+* check_element_latency.pl: Volume Latency
 * check_element_nodes.pl: Node Status
 * check_element_space.pl: Cluster Space Usage
 
