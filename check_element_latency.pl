@@ -2,7 +2,7 @@
 
 # nagios: -epn
 # --
-# check_element_cluster_performance - Check NetApp ElementOS Cluster Performance
+# check_element_cluster_performance - Check ElementOS Cluster Performance
 # Copyright (C) 2019 Alexander Krogloth, git@krogloth.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
@@ -24,6 +24,7 @@ GetOptions(
     'hostname=s' => \my $Hostname,
     'username=s' => \my $Username,
     'password=s' => \my $Password,
+    'latency=f' => \my $Latency,
     'help|?'     => sub { exec perldoc => -F => $0 or die "Cannot execute perldoc: $!\n"; },
 ) or Error("$0: Error in command line arguments\n");
 
@@ -34,6 +35,7 @@ sub Error {
 Error('Option --hostname needed!') unless $Hostname;
 Error('Option --username needed!') unless $Username;
 Error('Option --password needed!') unless $Password;
+Error('Option --latency needed!') unless $Latency;
 
 sub connect_api {
 
@@ -63,17 +65,28 @@ sub connect_api {
 
 }
 
-my $output = connect_api("GetClusterStats");
+my $output = connect_api("ListVolumeStatsByVolume");
 
-my $stats = $output->{'result'}->{'clusterStats'};
+my $volumes = $output->{'result'}->{'volumeStats'};
 
-my $cluster_util = $stats->{'clusterUtilization'}*100;
-$cluster_util = sprintf("%.2f", $cluster_util);
+my $slow = 0;
 
-if($cluster_util > 75){
-    print "WARNING: high cluster performance utilization ($cluster_util %)\n";
+my $latency_us = $Latency*1000;
+
+foreach my $volume (@$volumes){
+
+    my $latency = $volume->{'latencyUSec'};
+    
+
+    if($latency > $latency_us){
+        $slow++;
+    }
+}
+
+if($slow ne 0){
+    print "WARNING: volumes with high latency over $Latency ms\n";
     exit 2;
 } else { 
-    print "OK: cluster performance utilization ($cluster_util %)\n";
+    print "OK: no latency over $Latency ms\n";
     exit 0;
 }
