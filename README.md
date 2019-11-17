@@ -4,6 +4,8 @@
 
 Scripts for monitoring NetApp ElementOS (Solidfire) clusters for Nagios / Icinga / etc.
 
+Still in development, but usable :-)
+
 ## Plugins
 
 * check_element_cluster_performance.pl: Cluster Performance Headroom
