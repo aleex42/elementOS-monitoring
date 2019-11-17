@@ -19,8 +19,7 @@ Scripts for monitoring NetApp ElementOS (Solidfire) clusters for Nagios / Icinga
 
 # Contact / Author
 
-Alexander Krogloth
-<git at krogloth.de>
+Alexander Krogloth <git at krogloth.de>
 
 # License
 
