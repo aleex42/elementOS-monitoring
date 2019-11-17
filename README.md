@@ -19,6 +19,8 @@ Still in development, but usable :-)
 
 ![Nagios](https://github.com/aleex42/elementOS-monitoring/blob/master/examples/nagios.png)
 
+See examples/ subfolder for some nagios example configurations.
+
 # Contact / Author
 
 Alexander Krogloth (git at krogloth.de)
