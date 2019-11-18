@@ -24,6 +24,8 @@ GetOptions(
     'hostname=s' => \my $Hostname,
     'username=s' => \my $Username,
     'password=s' => \my $Password,
+    'warning=i' => \my $Warning,
+    'critical=i' => \my $Critical,
     'help|?'     => sub { exec perldoc => -F => $0 or die "Cannot execute perldoc: $!\n"; },
 ) or Error("$0: Error in command line arguments\n");
 
@@ -34,6 +36,8 @@ sub Error {
 Error('Option --hostname needed!') unless $Hostname;
 Error('Option --username needed!') unless $Username;
 Error('Option --password needed!') unless $Password;
+Error('Option --warning needed!') unless $Warning;
+Error('Option --critical needed!') unless $Critical;
 
 sub connect_api {
 
@@ -69,15 +73,23 @@ my $stats = $output->{'result'}->{'clusterCapacity'};
 
 my $total_space = $stats->{'maxUsedSpace'};
 my $used_space = $stats->{'usedSpace'};
+my $used_metadata = $stats->{'usedMetadataSpace'};
+my $total_metadata = $stats->{'maxUsedMetadataSpace'};
 
-my $percent = $used_space/$total_space*100;
-$percent = sprintf("%.2f", $percent);
+my $percent_space = $used_space/$total_space*100;
+$percent_space = sprintf("%.2f", $percent_space);
 
-if($percent > 70){
-    print "WARNING: cluster space usage ($percent %)\n";
+my $percent_metadata = $used_metadata/$total_metadata*100;
+$percent_metadata = sprintf("%.2f", $percent_metadata);
+
+if(($percent_space > $Critical ) || ($percent_metadata > $Critical)){
+    print "CRITICAL: cluster space usage (Block: $percent_space % / Meta: $percent_metadata %)\n";
     exit 2;
+} elsif(($percent_space > $Warning ) || ($percent_metadata > $Warning)){
+    print "WARNING: cluster space usage (Block: $percent_space % / Meta: $percent_metadata %)\n";
+    exit 1;
 } else { 
-    print "OK: cluster space usage ($percent %)\n";
+    print "OK: cluster space usage (Block: $percent_space % / Meta: $percent_metadata %)\n";
     exit 0;
 }
 
