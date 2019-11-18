@@ -92,34 +92,3 @@ if(($percent_space > $Critical ) || ($percent_metadata > $Critical)){
     print "OK: cluster space usage (Block: $percent_space % / Meta: $percent_metadata %)\n";
     exit 0;
 }
-
-#$VAR1 = {
-#          'id' => undef,
-#          'result' => {
-#                        'clusterCapacity' => {
-#                                               'totalOps' => 5481974816,
-#                                               'currentIOPS' => 4,
-#                                               'averageIOPS' => 1800,
-#                                               'nonZeroBlocks' => 247473741,
-#                                               'maxIOPS' => 200000,
-#                                               'uniqueBlocksUsedSpace' => '48061617985',
-#                                               'timestamp' => '2019-11-16T13:59:56Z',
-#                                               'usedSpace' => '48101484873',
-#                                               'usedMetadataSpaceInSnapshots' => 4011978752,
-#                                               'usedMetadataSpace' => 4011978752,
-#                                               'clusterRecentIOSize' => 0,
-#                                               'uniqueBlocks' => 16150854,
-#                                               'maxProvisionedSpace' => '110615957233664',
-#                                               'peakIOPS' => 153836,
-#                                               'snapshotNonZeroBlocks' => 0,
-#                                               'zeroBlocks' => 2369417651,
-#                                               'peakActiveSessions' => 22,
-#                                               'activeSessions' => 22,
-#                                               'maxUsedSpace' => '9602079621120',
-#                                               'maxOverProvisionableSpace' => '553079786168320',
-#                                               'maxUsedMetadataSpace' => '864187165900',
-#                                               'provisionedSpace' => '5359393570816',
-#                                               'activeBlockSpace' => '58664759904'
-#                                             }
-#                      }
-        #};
