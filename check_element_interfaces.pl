@@ -88,7 +88,7 @@ foreach my $node (@$nodes) {
 }
 
 if($failed ne 0){
-    print "ERROR: $failed ports no up\n";
+    print "ERROR: $failed ports not up\n";
     exit 2;
 } else { 
     print "OK: $up ports UpAndRunning\n";

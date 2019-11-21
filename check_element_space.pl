@@ -67,9 +67,15 @@ sub connect_api {
 
 }
 
-my $output = connect_api("GetClusterCapacity");
+#my $output = connect_api("GetClusterCapacity");
+
+my $output = connect_api("GetClusterFullThreshold");
 
 my $stats = $output->{'result'}->{'clusterCapacity'};
+
+print Dumper($output);
+
+die;
 
 my $total_space = $stats->{'maxUsedSpace'};
 my $used_space = $stats->{'usedSpace'};
@@ -92,3 +98,51 @@ if(($percent_space > $Critical ) || ($percent_metadata > $Critical)){
     print "OK: cluster space usage (Block: $percent_space % / Meta: $percent_metadata %)\n";
     exit 0;
 }
+
+#$VAR1 = {
+#          'maxIOPS' => 300000,
+#          'maxOverProvisionableSpace' => '829619679252480',
+#          'snapshotNonZeroBlocks' => 0,
+#          'usedMetadataSpace' => 4024844288,
+#          'usedMetadataSpaceInSnapshots' => 4024844288,
+#          'usedSpace' => '49911346023',
+#          'totalOps' => 5767293737,
+#          'maxUsedSpace' => '14403119431680',
+#          'zeroBlocks' => 2368649842,
+#          'peakIOPS' => 52,
+#          'peakActiveSessions' => 22,
+#          'timestamp' => '2019-11-20T15:38:38Z',
+#          'maxProvisionedSpace' => '165923935850496',
+#          'activeSessions' => 22,
+#          'currentIOPS' => 3,
+#          'clusterRecentIOSize' => 0,
+#          'averageIOPS' => 4,
+#          'uniqueBlocks' => 18232112,
+#          'activeBlockSpace' => '83870836944',
+#          'maxUsedMetadataSpace' => '1296280748850',
+#          'provisionedSpace' => '5359393570816',
+#          'uniqueBlocksUsedSpace' => '49887316910',
+#          'nonZeroBlocks' => 248241550
+#        };
+
+
+#GetClusterFullThreshold
+#
+#                        'maxMetadataOverProvisionFactor' => 5,
+#                        'sliceReserveUsedThresholdPct' => 5,
+#                        'stage3LowThreshold' => 2,
+#                        'metadataFullness' => 'stage1Happy',
+#                        'stage5BlockThresholdBytes' => '14401142784000',
+#                        'stage4CriticalThreshold' => 1,
+#                        'stage2BlockThresholdBytes' => '6768537108480',
+#                        'blockFullness' => 'stage1Happy',
+#                        'sumUsedMetadataClusterBytes' => 4024852480,
+#                        'sumTotalMetadataClusterBytes' => '1296280748850',
+#                        'stage3BlockThresholdPercent' => 3,
+#                        'stage2AwareThreshold' => 3,
+#                        'sumUsedClusterBytes' => '49913482661',
+#                        'stage3BlockThresholdBytes' => '11136883752960',
+#                        'fullness' => 'stage1Happy',
+#                        'stage4BlockThresholdBytes' => '11568918036480',
+#                        'sumTotalClusterBytes' => '14401142784000'
+#
