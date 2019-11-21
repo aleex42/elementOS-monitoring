@@ -67,22 +67,21 @@ sub connect_api {
 
 }
 
-#my $output = connect_api("GetClusterCapacity");
-
-my $output = connect_api("GetClusterFullThreshold");
+my $output = connect_api("GetClusterCapacity");
 
 my $stats = $output->{'result'}->{'clusterCapacity'};
-
-print Dumper($output);
-
-die;
 
 my $total_space = $stats->{'maxUsedSpace'};
 my $used_space = $stats->{'usedSpace'};
 my $used_metadata = $stats->{'usedMetadataSpace'};
 my $total_metadata = $stats->{'maxUsedMetadataSpace'};
 
-my $percent_space = $used_space/$total_space*100;
+my $full_output = connect_api("GetClusterFullThreshold");
+my $full_stats = $full_output->{'result'};
+
+my $warning_full = $full_stats->{'stage3BlockThresholdBytes'};
+
+my $percent_space = $used_space/$warning_full*100;
 $percent_space = sprintf("%.2f", $percent_space);
 
 my $percent_metadata = $used_metadata/$total_metadata*100;
@@ -99,50 +98,50 @@ if(($percent_space > $Critical ) || ($percent_metadata > $Critical)){
     exit 0;
 }
 
-#$VAR1 = {
-#          'maxIOPS' => 300000,
-#          'maxOverProvisionableSpace' => '829619679252480',
-#          'snapshotNonZeroBlocks' => 0,
-#          'usedMetadataSpace' => 4024844288,
-#          'usedMetadataSpaceInSnapshots' => 4024844288,
-#          'usedSpace' => '49911346023',
-#          'totalOps' => 5767293737,
-#          'maxUsedSpace' => '14403119431680',
-#          'zeroBlocks' => 2368649842,
-#          'peakIOPS' => 52,
-#          'peakActiveSessions' => 22,
-#          'timestamp' => '2019-11-20T15:38:38Z',
-#          'maxProvisionedSpace' => '165923935850496',
-#          'activeSessions' => 22,
-#          'currentIOPS' => 3,
-#          'clusterRecentIOSize' => 0,
-#          'averageIOPS' => 4,
-#          'uniqueBlocks' => 18232112,
-#          'activeBlockSpace' => '83870836944',
-#          'maxUsedMetadataSpace' => '1296280748850',
-#          'provisionedSpace' => '5359393570816',
-#          'uniqueBlocksUsedSpace' => '49887316910',
-#          'nonZeroBlocks' => 248241550
-#        };
-
+#                        'clusterCapacity' => {
+#                                               'peakIOPS' => 369,
+#                                               'zeroBlocks' => 2372212520,
+#                                               'maxProvisionedSpace' => '221231914467328',
+#                                               'averageIOPS' => 7,
+#                                               'usedMetadataSpace' => 3970572288,
+#                                               'peakActiveSessions' => 38,
+#                                               'maxIOPS' => 400000,
+#                                               'usedSpace' => '50081558926',
+#                                               'timestamp' => '2019-11-21T15:21:27Z',
+#                                               'uniqueBlocks' => 17906302,
+#                                               'maxUsedSpace' => '19204159242240',
+#                                               'clusterRecentIOSize' => 5179,
+#                                               'provisionedSpace' => '5359393570816',
+#                                               'nonZeroBlocks' => 244678872,
+#                                               'activeBlockSpace' => '94071187536',
+#                                               'maxUsedMetadataSpace' => '1728374331800',
+#                                               'totalOps' => 5767886433,
+#                                               'maxOverProvisionableSpace' => '1106159572336640',
+#                                               'uniqueBlocksUsedSpace' => '50065102307',
+#                                               'activeSessions' => 38,
+#                                               'snapshotNonZeroBlocks' => 0,
+#                                               'currentIOPS' => 4,
+#                                               'usedMetadataSpaceInSnapshots' => 3970572288
+#                                             }
 
 #GetClusterFullThreshold
-#
-#                        'maxMetadataOverProvisionFactor' => 5,
+
+#          'result' => {
+#                        'stage4CriticalThreshold' => 1,
+#                        'sumUsedMetadataClusterBytes' => 3970572288,
+#                        'stage2AwareThreshold' => 3,
+#                        'sumUsedClusterBytes' => '50080693091',
+#                        'stage4BlockThresholdBytes' => '16225287536640',
+#                        'sumTotalMetadataClusterBytes' => '1728374331800',
 #                        'sliceReserveUsedThresholdPct' => 5,
+#                        'stage3BlockThresholdBytes' => '15649241825280',
+#                        'stage3BlockThresholdPercent' => 3,
+#                        'maxMetadataOverProvisionFactor' => 5,
 #                        'stage3LowThreshold' => 2,
 #                        'metadataFullness' => 'stage1Happy',
-#                        'stage5BlockThresholdBytes' => '14401142784000',
-#                        'stage4CriticalThreshold' => 1,
-#                        'stage2BlockThresholdBytes' => '6768537108480',
 #                        'blockFullness' => 'stage1Happy',
-#                        'sumUsedMetadataClusterBytes' => 4024852480,
-#                        'sumTotalMetadataClusterBytes' => '1296280748850',
-#                        'stage3BlockThresholdPercent' => 3,
-#                        'stage2AwareThreshold' => 3,
-#                        'sumUsedClusterBytes' => '49913482661',
-#                        'stage3BlockThresholdBytes' => '11136883752960',
+#                        'stage2BlockThresholdBytes' => '11424906608640',
 #                        'fullness' => 'stage1Happy',
-#                        'stage4BlockThresholdBytes' => '11568918036480',
-#                        'sumTotalClusterBytes' => '14401142784000'
-#
+#                        'sumTotalClusterBytes' => '19201523712000',
+#                        'stage5BlockThresholdBytes' => '19201523712000'
+#                      },
