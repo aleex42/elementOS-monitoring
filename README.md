@@ -13,7 +13,7 @@ Still in development, but usable :-)
 * check_element_interfaces.pl: Interface Status
 * check_element_latency.pl: Volume Latency
 * check_element_nodes.pl: Node Status
-* check_element_space.pl: Cluster Space Usage
+* check_element_space.pl: Cluster Space Usage (error threshold)
 
 # Examples
 
