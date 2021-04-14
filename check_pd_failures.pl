@@ -93,9 +93,9 @@ if(($tolerance_failures_blocks != 1) || ($tolerance_failures_metadata != 1)){
 	print "CRITICAL: cluster not failure tolerant anymore\n";
 	exit 2;
 } elsif(($resiliency_failures_blocks != 1) || ($resiliency_failures_metadata != 1)){
-	print "WARNING: cluster not resiliant anymore\n";
+	print "WARNING: cluster not resilient anymore\n";
 	exit 1;
 } else {
-	print "OK: cluster failure tolerant and resiliant\n";
+	print "OK: cluster failure tolerant and resilient\n";
 	exit 0;
 }
