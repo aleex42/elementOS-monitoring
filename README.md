@@ -15,6 +15,11 @@ Still in development, but usable :-)
 * check_element_nodes.pl: Node Status
 * check_element_space.pl: Cluster Space Usage (error threshold)
 
+Only with Custom Protection Domains:
+
+* check_pd_space: Space Usage (Protection Domain aware)
+* check_pd_failures: Tolerance and Resiliancy
+
 # Examples
 
 ![Nagios](https://github.com/aleex42/elementOS-monitoring/blob/master/examples/nagios.png)
