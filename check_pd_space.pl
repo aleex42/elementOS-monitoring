@@ -73,10 +73,6 @@ my $result = $output->{'result'};
 
 my $levels = $result->{'protectionDomainLevels'};
 
-my $resiliency_failures_blocks;
-my $resiliency_failures_metadata;
-my $tolerance_failures_blocks;
-my $tolerance_failures_metadata;
 my $failure_bytes; 
 
 foreach my $level (@$levels){
