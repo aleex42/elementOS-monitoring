@@ -93,17 +93,17 @@ my $capa_result = $capa_output->{'result'};
 
 my $used_space = $capa_result->{'clusterCapacity'}->{'usedSpace'};
 
-my $used_percent = $used_space/$failure_bytes;
+my $used_percent = $used_space/$failure_bytes*100;
 
 $used_percent = sprintf("%.2f", $used_percent);
 
 if($used_percent >= $Critical){
-	print "CRITICAL: $used_percent space used\n";
+	print "CRITICAL: $used_percent % space used\n";
 	exit 2;
 } elsif($used_percent >= $Warning){
-	print "WARNING: $used_percent space used\n";
+	print "WARNING: $used_percent % space used\n";
 	exit 1;
 } else {
-	print "OK: $used_percent space used\n";
+	print "OK: $used_percent % space used\n";
 }
 
